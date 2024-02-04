@@ -1,14 +1,12 @@
 import { dehydrate, HydrationBoundary } from '@tanstack/react-query';
 
-import HomeComponent from '@/components/HomeComponent';
+import Home from '@/components/Home/Home';
 import getQueryClient from '@/lib/getQueryClient';
 
-export default function Home() {
+export default function Main() {
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-24">
-      <HydrationBoundary state={dehydrate(getQueryClient())}>
-        <HomeComponent />
-      </HydrationBoundary>
-    </main>
+    <HydrationBoundary state={dehydrate(getQueryClient())}>
+      <Home />
+    </HydrationBoundary>
   );
 }
