@@ -9,7 +9,7 @@ const HomeCard = () => {
     >
       <CardHeader>
         <CardTitle className="overflow-hidden text-center font-bold dark:text-white">
-          <p>test</p>
+          <p className="primary-yellow">test</p>
         </CardTitle>
       </CardHeader>
     </Card>

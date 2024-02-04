@@ -1,6 +1,12 @@
+'use client';
+
+import useGlobalStore from '@/shared/zustand/globalStore';
+
 import { Button } from '../ui/button';
 
 const HomeHero = () => {
+  const { setIsCreate } = useGlobalStore();
+
   return (
     <section id="hero" className="container">
       <div className="mb-10 mt-16 flex flex-col gap-8 text-center">
@@ -10,7 +16,7 @@ const HomeHero = () => {
         <p className="text-lg font-semibold italic text-black dark:text-white md:text-xl">Share your favorite code</p>
 
         <div className="flex items-center justify-center gap-4">
-          <Button>Share</Button>
+          <Button onClick={() => setIsCreate(true)}>Share</Button>
         </div>
       </div>
     </section>
