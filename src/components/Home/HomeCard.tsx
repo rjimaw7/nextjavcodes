@@ -16,7 +16,7 @@ const HomeCard = ({ code }: Props) => {
 
   return (
     <Card
-      className="relative m-4 cursor-pointer border border-white p-8 shadow-xl
+      className="relative m-4 cursor-pointer p-8 shadow-xl
     shadow-yellow-500/40
     transition-transform hover:scale-105
     md:w-[350px]
