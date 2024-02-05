@@ -2,15 +2,15 @@
 
 /* eslint-disable no-console */
 import { sql } from '@vercel/postgres';
+import { revalidatePath } from 'next/cache';
 
+import { generateRandomNumber } from '@/lib/utils';
 import type { ICodes } from '@/shared/interfaces/ICodes';
+import type { CodeType } from '@/shared/zod/schema';
 
 export const fetchCodes = async () => {
   try {
-    // const data = await sql<ICodes>`SELECT * FROM codes LIMIT 10`;
-    const data = await sql<ICodes>`SELECT * FROM codes`;
-
-    console.log('SERVER : ', data);
+    const data = await sql<ICodes>`SELECT * FROM codes ORDER BY created_at DESC`;
 
     return data.rows;
   } catch (error) {
@@ -37,4 +37,14 @@ export const fetchCodeById = async (id: string) => {
     console.error('Database Error:', error);
     throw new Error('Failed to fetch code.');
   }
+};
+
+export const addCode = async (values: CodeType) => {
+  try {
+    await sql`INSERT INTO codes (title, views, created_at) VALUES (${values.title}, ${generateRandomNumber()}, CURRENT_TIMESTAMP);`;
+  } catch (error: any) {
+    console.error('Database Error:', error);
+    throw new Error('Failed to ADD code.');
+  }
+  revalidatePath('/');
 };

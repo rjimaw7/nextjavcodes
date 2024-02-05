@@ -29,7 +29,7 @@ const HomeCard = ({ code }: Props) => {
     >
       <CardHeader>
         <CardTitle className="overflow-hidden text-center font-bold dark:text-white">
-          <p className="primary-yellow">{code.title}</p>
+          <p className="primary-yellow">{code.title.toUpperCase()}</p>
         </CardTitle>
         <div className="absolute -left-4 bottom-3 flex w-full items-center justify-end gap-2">
           <Eye size={18} className="text-muted-foreground" />

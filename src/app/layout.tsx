@@ -5,6 +5,7 @@ import { Inter } from 'next/font/google';
 
 import Navbar from '@/components/Navbar';
 import { ThemeProvider } from '@/components/theme-provider';
+import { Toaster } from '@/components/ui/toaster';
 import Providers from '@/lib/provider';
 
 const inter = Inter({ subsets: ['latin'] });
@@ -30,6 +31,7 @@ export default function RootLayout({
             </main>
           </Providers>
         </ThemeProvider>
+        <Toaster />
       </body>
     </html>
   );

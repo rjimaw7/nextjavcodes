@@ -21,3 +21,10 @@ export const formatNumber = (value: number): string => {
 export const generateRandomNumber = (): number => {
   return faker.number.int({ max: 5000000 });
 };
+
+export const isStringEnclosedInBrackets = (inputString: string) => {
+  const regex = /^\[.*\]$/;
+
+  // Test if the inputString matches the regex
+  return regex.test(inputString);
+};
