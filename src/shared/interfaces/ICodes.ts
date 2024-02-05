@@ -1,6 +1,5 @@
 export interface ICodes {
   id?: string;
-  code: string;
-  url: string;
+  title: string;
   views: number;
 }

@@ -1,9 +1,7 @@
-'use client';
-
 import HomeCards from './HomeCards';
 import HomeHero from './HomeHero';
 
-const Home = () => {
+const Home = async () => {
   return (
     <div className="container flex min-h-screen flex-col">
       <HomeHero />
