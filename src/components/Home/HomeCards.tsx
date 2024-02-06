@@ -1,5 +1,8 @@
+/* eslint-disable import/no-extraneous-dependencies */
+
 'use client';
 
+import { useDebounce } from '@uidotdev/usehooks';
 import React, { useMemo } from 'react';
 
 import { useCodeService } from '@/shared/services/codeService';
@@ -11,9 +14,10 @@ import SkeletonCard from './SkeletonCard';
 
 const HomeCards = () => {
   // ALL HOOKS
-  const { isCreate } = useGlobalStore();
+  const { isCreate, searchQuery } = useGlobalStore();
+  const debouncedSearchQuery = useDebounce(searchQuery, 300);
   const { GetAllCodes } = useCodeService();
-  const { data: allCodesData, isLoading: allCodesLoading } = GetAllCodes();
+  const { data: allCodesData, isLoading: allCodesLoading } = GetAllCodes(debouncedSearchQuery);
 
   const allCodesDataMemo = useMemo(() => allCodesData, [allCodesData]);
 

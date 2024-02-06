@@ -8,9 +8,16 @@ import { generateRandomNumber } from '@/lib/utils';
 import type { ICodes } from '@/shared/interfaces/ICodes';
 import type { CodeType } from '@/shared/zod/schema';
 
-export const fetchCodes = async () => {
+export const fetchCodes = async (query?: string) => {
   try {
-    const data = await sql<ICodes>`SELECT * FROM codes ORDER BY created_at DESC`;
+    // const data = await sql<ICodes>`SELECT * FROM codes ORDER BY created_at DESC`;
+
+    const data = query
+      ? await sql<ICodes>`SELECT * FROM codes WHERE title LIKE ${`%${query.toUpperCase()}%`};`
+      : await sql<ICodes>`SELECT * FROM codes ORDER BY created_at DESC`;
+
+    console.log('SEARCH QUERY: ', query);
+    console.log(data);
 
     return data.rows;
   } catch (error) {

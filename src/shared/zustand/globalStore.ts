@@ -10,6 +10,8 @@ interface GlobalState {
   setIsModalOpen: (value: boolean) => void;
   selectedCode: Partial<ICodes>;
   setSelectedCode: (code: Partial<ICodes>) => void;
+  searchQuery: string;
+  setSearchQuery: (value: string) => void;
 }
 
 const useGlobalStore = create<GlobalState>((set) => ({
@@ -18,7 +20,9 @@ const useGlobalStore = create<GlobalState>((set) => ({
   isModalOpen: false,
   setIsModalOpen: (value: boolean) => set({ isModalOpen: value }),
   selectedCode: {},
-  setSelectedCode: (code: Partial<ICodes>) => set({ selectedCode: code })
+  setSelectedCode: (code: Partial<ICodes>) => set({ selectedCode: code }),
+  searchQuery: '',
+  setSearchQuery: (value: string) => set({ searchQuery: value })
 }));
 
 export default useGlobalStore;

@@ -6,10 +6,10 @@ import { CODE_KEY } from '../constants/constants';
 import type { CodeType } from '../zod/schema';
 
 export const useCodeService = () => {
-  const GetAllCodes = () => {
+  const GetAllCodes = (query?: string) => {
     return useQuery({
-      queryFn: async () => fetchCodes(),
-      queryKey: [CODE_KEY]
+      queryFn: async () => fetchCodes(query),
+      queryKey: [CODE_KEY, query]
     });
   };
 
