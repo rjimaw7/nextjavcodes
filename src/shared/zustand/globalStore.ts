@@ -12,6 +12,9 @@ interface GlobalState {
   setSelectedCode: (code: Partial<ICodes>) => void;
   searchQuery: string;
   setSearchQuery: (value: string) => void;
+  isAdminMode: boolean;
+  setIsAdminMode: (value: boolean) => void;
+  toggleAdminMode: (value: boolean) => void;
 }
 
 const useGlobalStore = create<GlobalState>((set) => ({
@@ -22,7 +25,10 @@ const useGlobalStore = create<GlobalState>((set) => ({
   selectedCode: {},
   setSelectedCode: (code: Partial<ICodes>) => set({ selectedCode: code }),
   searchQuery: '',
-  setSearchQuery: (value: string) => set({ searchQuery: value })
+  setSearchQuery: (value: string) => set({ searchQuery: value }),
+  isAdminMode: true,
+  setIsAdminMode: (value: boolean) => set({ isAdminMode: value }),
+  toggleAdminMode: (value: boolean) => set({ isAdminMode: value })
 }));
 
 export default useGlobalStore;

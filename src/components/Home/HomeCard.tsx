@@ -16,7 +16,7 @@ interface Props {
 
 const HomeCard = ({ code }: Props) => {
   // ALL HOOKS
-  const { isCreate } = useGlobalStore();
+  const { isCreate, isAdminMode } = useGlobalStore();
   const [openMenu, setOpenMenu] = useState(false);
 
   return (
@@ -24,7 +24,6 @@ const HomeCard = ({ code }: Props) => {
       className="relative m-4 cursor-pointer p-8 shadow-xl
     shadow-yellow-500/40
     transition-transform hover:scale-105
-    md:w-[350px]
     "
       onClick={() => {
         if (!isCreate) {
@@ -42,7 +41,7 @@ const HomeCard = ({ code }: Props) => {
         </div>
       </CardHeader>
 
-      <HomeCardMenu code={code} openMenu={openMenu} setOpenMenu={setOpenMenu} />
+      {isAdminMode && <HomeCardMenu code={code} openMenu={openMenu} setOpenMenu={setOpenMenu} />}
     </Card>
   );
 };

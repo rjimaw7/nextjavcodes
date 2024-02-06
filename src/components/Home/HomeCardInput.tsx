@@ -119,7 +119,7 @@ md:w-[350px]
                 <FormItem>
                   <FormControl>
                     <div className="flex items-center justify-between gap-4">
-                      <Input className="text-[#FACC15]" maxLength={15} {...field} />
+                      <Input className="text-[#FACC15]" maxLength={15} {...field} placeholder="Enter Code..." />
                       {!AddCode.isPending && !UpdateCode.isPending && (
                         <>
                           <CheckCircle2

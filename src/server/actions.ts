@@ -16,9 +16,6 @@ export const fetchCodes = async (query?: string) => {
       ? await sql<ICodes>`SELECT * FROM codes WHERE title LIKE ${`%${query.toUpperCase()}%`};`
       : await sql<ICodes>`SELECT * FROM codes ORDER BY created_at DESC`;
 
-    console.log('SEARCH QUERY: ', query);
-    console.log(data);
-
     return data.rows;
   } catch (error) {
     console.error('Database Error:', error);
