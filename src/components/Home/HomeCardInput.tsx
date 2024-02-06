@@ -1,7 +1,10 @@
+/* eslint-disable react-hooks/exhaustive-deps */
+
 'use client';
 
 import { zodResolver } from '@hookform/resolvers/zod';
 import { CheckCircle2, Loader2, XCircle } from 'lucide-react';
+import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 
 import { Card, CardHeader, CardTitle } from '@/components/ui/card';
@@ -20,9 +23,10 @@ import HomeToast from './HomeToast';
 
 const HomeCardInput = () => {
   // ALL HOOKS
-  const { setIsCreate } = useGlobalStore();
-  const { AddCodeMutation } = useCodeService();
+  const { setIsCreate, selectedCode, setSelectedCode, isCreate } = useGlobalStore();
+  const { AddCodeMutation, UpdateCodeMutation } = useCodeService();
   const { AddCode } = AddCodeMutation();
+  const { UpdateCode } = UpdateCodeMutation();
   const invalidateQuery = useQueryInvalidator();
   const { toast } = useToast();
 
@@ -36,33 +40,68 @@ const HomeCardInput = () => {
   const onSubmit = (values: CodeType) => {
     const checkCodeString = isStringEnclosedInBrackets(values.title) ? values.title : `[${values.title}]`;
 
-    AddCode.mutate(
-      {
-        title: checkCodeString
-      },
-      {
-        onSuccess: () => {
-          toast({
-            description: <HomeToast message="Created" />
-          });
-          invalidateQuery(CODE_KEY);
-          form.reset();
-          setIsCreate(false);
+    // IF EDIT MODE
+    if (selectedCode) {
+      UpdateCode.mutate(
+        {
+          title: checkCodeString,
+          id: selectedCode.id
         },
-        onError: () => {
-          toast({
-            title: 'Uh oh! Something went wrong.',
-            description: <HomeToast message="Create Error" />
-          });
+        {
+          onSuccess: () => {
+            toast({
+              description: <HomeToast message="Updated" />
+            });
+            invalidateQuery(CODE_KEY);
+            form.reset();
+            setIsCreate(false);
+            setSelectedCode({});
+          },
+          onError: () => {
+            toast({
+              title: 'Uh oh! Something went wrong.',
+              description: <HomeToast message="Update Error" />
+            });
+          }
         }
-      }
-    );
+      );
+    } else {
+      // CREATE MODE
+      AddCode.mutate(
+        {
+          title: checkCodeString
+        },
+        {
+          onSuccess: () => {
+            toast({
+              description: <HomeToast message="Created" />
+            });
+            invalidateQuery(CODE_KEY);
+            form.reset();
+            setIsCreate(false);
+          },
+          onError: () => {
+            toast({
+              title: 'Uh oh! Something went wrong.',
+              description: <HomeToast message="Create Error" />
+            });
+          }
+        }
+      );
+    }
   };
 
   const onCancel = () => {
     setIsCreate(false);
+    setSelectedCode({});
     form.reset();
   };
+
+  useEffect(() => {
+    if (isCreate && selectedCode && selectedCode.title !== undefined) {
+      form.setValue('title', selectedCode.title!);
+    }
+  }, [isCreate, selectedCode]);
 
   return (
     <Card
@@ -81,7 +120,7 @@ md:w-[350px]
                   <FormControl>
                     <div className="flex items-center justify-between gap-4">
                       <Input className="text-[#FACC15]" maxLength={15} {...field} />
-                      {!AddCode.isPending && (
+                      {!AddCode.isPending && !UpdateCode.isPending && (
                         <>
                           <CheckCircle2
                             size={34}
@@ -92,7 +131,9 @@ md:w-[350px]
                         </>
                       )}
 
-                      {AddCode.isPending && <Loader2 size={34} className="animate-spin text-[#FACC15]" />}
+                      {(AddCode.isPending || UpdateCode.isPending) && (
+                        <Loader2 size={34} className="animate-spin text-[#FACC15]" />
+                      )}
                     </div>
                   </FormControl>
                   <FormMessage className="flex justify-start" />

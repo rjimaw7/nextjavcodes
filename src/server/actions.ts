@@ -48,3 +48,22 @@ export const addCode = async (values: CodeType) => {
   }
   revalidatePath('/');
 };
+
+export const updateCode = async (values: CodeType) => {
+  try {
+    await sql`
+    UPDATE codes
+    SET title = ${values.title}
+    WHERE id = ${values.id}`;
+  } catch (error: any) {
+    console.error('Database Error:', error);
+    throw new Error('Failed to Update code.');
+  }
+  revalidatePath('/');
+};
+
+export const deleteCode = async (id: string) => {
+  await sql`DELETE FROM codes WHERE id = ${id};`;
+
+  revalidatePath('/');
+};
