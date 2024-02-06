@@ -13,7 +13,10 @@ const HomeHero = () => {
         <h1 className="text-center text-6xl font-bold tracking-tighter md:text-8xl">
           <span className="primary-yellow">Jav</span>Codes
         </h1>
-        <p className="text-lg font-semibold italic text-black dark:text-white md:text-xl">Share your favorite code</p>
+        <div>
+          <p className="primary-yellow text-base font-semibold italic md:text-xl">Explore Japanese Adult Films</p>
+          <p className="text-lg font-semibold italic md:text-xl">Share Your Top Codes</p>
+        </div>
 
         <div className="flex items-center justify-center gap-4">
           <Button onClick={() => setIsCreate(true)}>Share</Button>
