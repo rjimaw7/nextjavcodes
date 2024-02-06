@@ -41,7 +41,7 @@ const HomeCardInput = () => {
     const checkCodeString = isStringEnclosedInBrackets(values.title) ? values.title : `[${values.title}]`;
 
     // IF EDIT MODE
-    if (selectedCode) {
+    if (selectedCode && Object.keys(selectedCode).length !== 0) {
       UpdateCode.mutate(
         {
           title: checkCodeString,
@@ -83,7 +83,7 @@ const HomeCardInput = () => {
           onError: () => {
             toast({
               title: 'Uh oh! Something went wrong.',
-              description: <HomeToast message="Create Error" />
+              description: <HomeToast message="Already Exist!" />
             });
           }
         }
