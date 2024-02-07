@@ -14,7 +14,13 @@ const Navbar = () => {
   return (
     <header className="container sticky top-0 z-50 flex flex-col items-start justify-between gap-8 py-6 backdrop-blur md:flex-row md:items-center md:gap-0 md:px-12 md:py-3">
       <div>
-        <Code className="primary-yellow cursor-pointer" size={32} />
+        <Code
+          className="primary-yellow cursor-pointer"
+          size={32}
+          onClick={() => {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+          }}
+        />
       </div>
       <div className="flex w-full items-center gap-4 md:w-auto">
         <Input
