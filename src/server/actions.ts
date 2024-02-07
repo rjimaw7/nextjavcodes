@@ -1,3 +1,5 @@
+/* eslint-disable no-nested-ternary */
+
 'use server';
 
 /* eslint-disable no-console */
@@ -5,30 +7,26 @@ import { sql } from '@vercel/postgres';
 import { revalidatePath } from 'next/cache';
 
 import { generateRandomNumber } from '@/lib/utils';
-import type { ICodes } from '@/shared/interfaces/ICodes';
+import type { ICodes, SortByType } from '@/shared/interfaces/ICodes';
 import type { CodeType } from '@/shared/zod/schema';
 
-// export const fetchCodes = async (query?: string) => {
-//   try {
-//     const data = query
-//       ? await sql<ICodes>`SELECT * FROM codes WHERE title LIKE ${`%${query.toUpperCase()}%`};`
-//       : await sql<ICodes>`SELECT * FROM codes ORDER BY created_at DESC`;
-
-//     return data.rows;
-//   } catch (error) {
-//     console.error('Database Error:', error);
-//     throw new Error('Failed to fetch codes.');
-//   }
-// };
-
-export const fetchCodes = async (query?: string, page = 1, limit = 10) => {
+export const fetchCodes = async (query?: string, page = 1, limit = 10, sortBy?: SortByType) => {
   try {
     // Calculate the offset based on the page number and limit
     const offset = (page - 1) * limit;
 
-    const data = query
-      ? await sql<ICodes>`SELECT * FROM codes WHERE title LIKE ${`%${query.toUpperCase()}%`} ORDER BY created_at DESC LIMIT ${limit} OFFSET ${offset};`
-      : await sql<ICodes>`SELECT * FROM codes ORDER BY created_at DESC LIMIT ${limit} OFFSET ${offset};`;
+    const data =
+      sortBy === 'latest'
+        ? await sql<ICodes>`SELECT * FROM codes ORDER BY created_at DESC LIMIT ${limit} OFFSET ${offset}`
+        : sortBy === 'most_viewed'
+          ? await sql<ICodes>`SELECT * FROM codes ORDER BY views DESC LIMIT ${limit} OFFSET ${offset}`
+          : await sql<ICodes>`SELECT * FROM codes ORDER BY created_at ASC LIMIT ${limit} OFFSET ${offset}`;
+
+    if (query) {
+      const searchCodeData = await sql<ICodes>`SELECT * FROM codes WHERE title LIKE ${`%${query.toUpperCase()}%`}`;
+
+      return searchCodeData.rows;
+    }
 
     return data.rows;
   } catch (error) {

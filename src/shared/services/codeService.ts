@@ -4,7 +4,7 @@ import { useInfiniteQuery, useMutation } from '@tanstack/react-query';
 import { addCode, deleteCode, fetchCodes, updateCode } from '@/server/actions';
 
 import { CODE_KEY } from '../constants/constants';
-import type { ICodes } from '../interfaces/ICodes';
+import type { ICodes, SortByType } from '../interfaces/ICodes';
 import type { CodeType } from '../zod/schema';
 
 export const useCodeService = () => {
@@ -15,10 +15,10 @@ export const useCodeService = () => {
   //   });
   // };
 
-  const GetAllCodes = (query?: string, page?: number, limit?: number) => {
+  const GetAllCodes = (query?: string, page?: number, limit?: number, sortBy?: SortByType) => {
     return useInfiniteQuery<ICodes[], Error>({
-      queryKey: [CODE_KEY, query, page, limit],
-      queryFn: ({ pageParam = page }) => fetchCodes(query, pageParam as number, limit),
+      queryKey: [CODE_KEY, query, page, limit, sortBy],
+      queryFn: ({ pageParam = page }) => fetchCodes(query, pageParam as number, limit, sortBy),
       initialPageParam: 1,
       getNextPageParam: (lastPage, allPages) => {
         const nextPage = lastPage?.length > 0 ? allPages?.length + 1 : null;

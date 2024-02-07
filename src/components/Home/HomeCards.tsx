@@ -4,27 +4,33 @@
 'use client';
 
 import { useDebounce } from '@uidotdev/usehooks';
-import React, { useEffect, useMemo } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { useInView } from 'react-intersection-observer';
 
+import type { SortByType } from '@/shared/interfaces/ICodes';
 import { useCodeService } from '@/shared/services/codeService';
 import useGlobalStore from '@/shared/zustand/globalStore';
 
 import HomeCard from './HomeCard';
 import HomeCardInput from './HomeCardInput';
+import HomeFilter from './HomeFilter';
 import SkeletonCard from './SkeletonCard';
 
 const HomeCards = () => {
+  const [sort, setSort] = useState<SortByType>('latest');
+
   // ALL HOOKS
   const { isCreate, searchQuery } = useGlobalStore();
   const debouncedSearchQuery = useDebounce(searchQuery, 300);
+
   const { GetAllCodes } = useCodeService();
   const {
     data: allCodesData,
     isLoading: allCodesLoading,
     hasNextPage,
     fetchNextPage
-  } = GetAllCodes(debouncedSearchQuery, 1, 10);
+    // SEARCH // PAGE // LIMIT // SORT
+  } = GetAllCodes(debouncedSearchQuery, 1, 10, sort);
 
   const { ref, inView } = useInView({
     threshold: 0
@@ -49,7 +55,9 @@ const HomeCards = () => {
   }, [inView, hasNextPage]);
 
   return (
-    <section id="cards" className="container">
+    <section id="cards" className="container flex flex-col gap-6">
+      <HomeFilter sort={sort} setSort={setSort} allCodesLoading={allCodesLoading} />
+
       <div className="grid grid-cols-1 gap-6 pb-10 md:grid-cols-2 md:gap-8 lg:mx-20 lg:grid-cols-3">
         {isCreate && <HomeCardInput />}
         {allCodesLoading
