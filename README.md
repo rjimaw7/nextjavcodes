@@ -20,6 +20,7 @@ To get started with JavCodes, follow these steps:
 - Share codes with others
 - Edit existing codes
 - Delete codes
+  
 
 ## Technologies Used
 
@@ -27,6 +28,7 @@ To get started with JavCodes, follow these steps:
 - PostgreSQL
 - React
 - App Router
+- React Query . Reference : https://github.com/developedbyed/next14-query-combo-cache-destroyer
 
 ## Todo
 
