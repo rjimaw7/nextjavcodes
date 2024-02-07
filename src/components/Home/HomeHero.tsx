@@ -8,7 +8,7 @@ const HomeHero = () => {
   const { setIsCreate } = useGlobalStore();
 
   return (
-    <section id="hero" className="container">
+    <section id="hero" className="container flex items-center justify-center">
       <div className="mb-10 mt-16 flex flex-col gap-8 text-center">
         <h1 className="text-center text-6xl font-bold tracking-tighter md:text-8xl">
           <span className="primary-yellow">Jav</span>Codes
