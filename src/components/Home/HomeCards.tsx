@@ -1,9 +1,11 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable import/no-extraneous-dependencies */
 
 'use client';
 
 import { useDebounce } from '@uidotdev/usehooks';
-import React, { useMemo } from 'react';
+import React, { useEffect, useMemo } from 'react';
+import { useInView } from 'react-intersection-observer';
 
 import { useCodeService } from '@/shared/services/codeService';
 import useGlobalStore from '@/shared/zustand/globalStore';
@@ -17,9 +19,34 @@ const HomeCards = () => {
   const { isCreate, searchQuery } = useGlobalStore();
   const debouncedSearchQuery = useDebounce(searchQuery, 300);
   const { GetAllCodes } = useCodeService();
-  const { data: allCodesData, isLoading: allCodesLoading } = GetAllCodes(debouncedSearchQuery);
+  const {
+    data: allCodesData,
+    isLoading: allCodesLoading,
+    hasNextPage,
+    fetchNextPage
+  } = GetAllCodes(debouncedSearchQuery, 1, 10);
 
-  const allCodesDataMemo = useMemo(() => allCodesData, [allCodesData]);
+  const { ref, inView } = useInView({
+    threshold: 0
+  });
+
+  // const allCodesDataMemo = useMemo(() => allCodesData, [allCodesData]);
+
+  const allCodesDataMemo = useMemo(() => {
+    if (allCodesData) {
+      return allCodesData.pages.flatMap((page) => page);
+    }
+    return [];
+  }, [allCodesData]);
+
+  // FOR INFINITE SCROLL
+  useEffect(() => {
+    if (inView) {
+      if (hasNextPage) {
+        fetchNextPage();
+      }
+    }
+  }, [inView, hasNextPage]);
 
   return (
     <section id="cards" className="container">
@@ -34,7 +61,9 @@ const HomeCards = () => {
           : allCodesDataMemo && allCodesDataMemo.map((code) => <HomeCard code={code} key={code.id} />)}
       </div>
 
-      {/* {dreamDataMemo && dreamDataMemo.length >= 10 && <div ref={ref} />} */}
+      {allCodesDataMemo && allCodesDataMemo.length >= 10 && hasNextPage && (
+        <div className="mb-4 flex w-full items-center justify-center" ref={ref} />
+      )}
     </section>
   );
 };

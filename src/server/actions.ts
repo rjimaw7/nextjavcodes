@@ -8,13 +8,27 @@ import { generateRandomNumber } from '@/lib/utils';
 import type { ICodes } from '@/shared/interfaces/ICodes';
 import type { CodeType } from '@/shared/zod/schema';
 
-export const fetchCodes = async (query?: string) => {
+// export const fetchCodes = async (query?: string) => {
+//   try {
+//     const data = query
+//       ? await sql<ICodes>`SELECT * FROM codes WHERE title LIKE ${`%${query.toUpperCase()}%`};`
+//       : await sql<ICodes>`SELECT * FROM codes ORDER BY created_at DESC`;
+
+//     return data.rows;
+//   } catch (error) {
+//     console.error('Database Error:', error);
+//     throw new Error('Failed to fetch codes.');
+//   }
+// };
+
+export const fetchCodes = async (query?: string, page = 1, limit = 10) => {
   try {
-    // const data = await sql<ICodes>`SELECT * FROM codes ORDER BY created_at DESC`;
+    // Calculate the offset based on the page number and limit
+    const offset = (page - 1) * limit;
 
     const data = query
-      ? await sql<ICodes>`SELECT * FROM codes WHERE title LIKE ${`%${query.toUpperCase()}%`};`
-      : await sql<ICodes>`SELECT * FROM codes ORDER BY created_at DESC`;
+      ? await sql<ICodes>`SELECT * FROM codes WHERE title LIKE ${`%${query.toUpperCase()}%`} ORDER BY created_at DESC LIMIT ${limit} OFFSET ${offset};`
+      : await sql<ICodes>`SELECT * FROM codes ORDER BY created_at DESC LIMIT ${limit} OFFSET ${offset};`;
 
     return data.rows;
   } catch (error) {
